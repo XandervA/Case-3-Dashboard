@@ -63,36 +63,9 @@ fig = px.bar(daily_energy, x='Started', y='TotalEnergy', title='Total Energy Con
 fig.add_hline(y=overall_mean_energy, line_dash='dash', line_color='red', annotation_text=f'Overall Mean: {overall_mean_energy:.2f}')
 fig.update_annotations(x=1, y=1, font=dict(size=15, color="red"))
 
-
-# Plot 2
-# Create a new DataFrame to store the expanded records with adjusted 'TotalEnergy' values
-expanded_data = []
-
-for _, row in lp_data.iterrows():
-    # Calculate the duration of each record in minutes
-    duration_minutes = (row['Ended'] - row['Started']).total_seconds() / 60
-    
-    # Calculate the 'TotalEnergy' per minute
-    energy_per_minute = row['TotalEnergy'] / duration_minutes
-
-    # Create new rows for each minute within the range with adjusted 'TotalEnergy'
-    for minute in pd.date_range(row['Started'], row['Ended'], freq='T'):
-        expanded_data.append({'Date': minute, 'TotalEnergy': energy_per_minute})
-
-# Create a DataFrame from the expanded data
-expanded_lp_data = pd.DataFrame(expanded_data)
-
-# Group by 15-minute intervals, calculating the sum 'TotalEnergy' for a single day
-interval_energy = expanded_lp_data.groupby(expanded_lp_data['Date'].dt.strftime('%H:%M'))['TotalEnergy'].sum().reset_index()
-
-# Creating bar plot to show energy needs
-fig2 = px.bar(interval_energy, x='Date', y='TotalEnergy', title='Total Annual Energy Over 1-Minute Intervals for 2018')
-
-
 # Streamlit section
 st.title("Case 3 Dashboard WIP")
 st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
 
 st.subheader("Data exploration")
 st.plotly_chart(fig)
-st.plotly_chart(fig2)
