@@ -13,12 +13,6 @@ lp_data = lp_data.dropna()
 # Adding date column to determine what date a given column should be assigned to
 lp_data['Date'] = lp_data.apply(lambda row: pd.date_range(row['Started'].date(), row['Ended'].date()), axis=1)
 
-# Calculating the TotalEnergy by 15 minute intervals for a single day based on the average over the entire year
-interval_energy = lp_data.groupby(lp_data['Started'].dt.strftime('%H:%M:%S').astype('datetime64[m]') // pd.Timedelta(minutes=15) * pd.Timedelta(minutes=15))['TotalEnergy'].mean().reset_index()
-
-# Creating bar plot to show energy need in 15 minute intervals based on annual mean
-fig2 = px.bar(interval_energy, x='Started', y='TotalEnergy', title='Total Energy need by 15-Minute Intervals (based on the 2018 mean)')
-
 # Grouping by date & calculating the sum of energy per day
 lp_data = lp_data.explode('Date')
 daily_energy = lp_data.groupby('Date')['TotalEnergy'].sum().reset_index()
@@ -32,5 +26,3 @@ st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher
 
 st.subheader("Data exploration")
 st.plotly_chart(fig)
-
-st.plotly_chart(fig2)
