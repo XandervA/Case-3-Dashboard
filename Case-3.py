@@ -4,11 +4,17 @@ import plotly.express as px
 import streamlit as st
 
 lp_data = pd.read_csv('laadpaaldata.csv')
+car_data = pd.read_csv('verkeersprestaties_2015_2021.csv')
 
 # Data includes Feb 29th but 2018 wasn't a leap year? Setting invalid dates to NaT and dropping them
 lp_data['Started'] = pd.to_datetime(lp_data['Started'], errors='coerce')
 lp_data['Ended'] = pd.to_datetime(lp_data['Ended'], errors='coerce')
 lp_data = lp_data.dropna()
+
+# Filtering car data
+car_sum_data = car_data[car_data['Leeftijd'] == 'Totaal']
+car_sum_data = car_sum_data.drop(columns=['Leeftijd', 'km_2021', 'km_2020', 'km_2019', 'km_2018', 'km_2017', 'km_2016', 'km_2015'])
+car_sum_data = car_sum_data.drop([0])
 
 # Plot 1
 # Create a new DataFrame to store the split charging sessions
@@ -63,9 +69,25 @@ fig = px.bar(daily_energy, x='Started', y='TotalEnergy', title='Total Energy Con
 fig.add_hline(y=overall_mean_energy, line_dash='dash', line_color='red', annotation_text=f'Overall Mean: {overall_mean_energy:.2f}')
 fig.update_annotations(x=1, y=1, font=dict(size=15, color="red"))
 
+
+# Plot 2 
+car_sum_data_melted = pd.melt(car_sum_data, id_vars=['Brandstofsoort'], var_name='Year', value_name='Number of Cars')
+
+car_sum_data_melted['Year'] = car_sum_data_melted['Year'].str.extract('(\d+)').astype(int)
+
+fig2 = px.line(car_sum_data_melted, x='Year', y='Number of Cars', color='Brandstofsoort',
+              title='Number of Cars by Fuel Type (2015-2021)',
+              labels={'Number of Cars': 'Number of Cars'},
+              hover_name='Brandstofsoort')
+
+fig2.update_traces(mode='lines+markers')
+
+fig2.update_layout(showlegend=True, yaxis_type="log")
+
 # Streamlit section
 st.title("Case 3 Dashboard WIP")
 st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
 
 st.subheader("Data exploration")
 st.plotly_chart(fig)
+st.plotly_chart(fig2)
