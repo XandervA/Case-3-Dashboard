@@ -69,10 +69,6 @@ fig = px.bar(daily_energy, x='Started', y='TotalEnergy', title='Total Energy Con
 fig.add_hline(y=overall_mean_energy, line_dash='dash', line_color='red', annotation_text=f'Overall Mean: {overall_mean_energy:.2f}')
 fig.update_annotations(x=1, y=1, font=dict(size=15, color="red"))
 
-st.title("Case 3 Dashboard WIP")
-st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
-st.plotly_chart(fig, use_container_width=True)
-
 # Streamlit section
 st.title("Case 3 Dashboard WIP")
 st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
