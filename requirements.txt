@@ -8,4 +8,4 @@ geopandas
 requests
 folium
 folium.plugins
-streamlit-folium
+streamlit_folium
