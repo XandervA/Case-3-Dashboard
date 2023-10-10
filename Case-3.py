@@ -1,8 +1,8 @@
 import numpy as np 
 import pandas as pd
+import requests
 import plotly.express as px
 import streamlit as st
-import requests
 import geopandas as gpd
 import folium
 from folium.plugins import MarkerCluster
@@ -11,7 +11,7 @@ from streamlit_folium import st_folium
 lp_data = pd.read_csv('laadpaaldata.csv')
 car_data = pd.read_csv('verkeersprestaties_2015_2021.csv')
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=1200)
 def api_call():
     response = requests.get("https://api.openchargemap.io/v3/poi/?output=geojson&countrycode=NL&maxresults=8000&key=93b912b5-9d70-4b1f-960b-fb80a4c9c017")
     
