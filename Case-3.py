@@ -6,6 +6,7 @@ import folium
 import requests
 import geopandas as gpd
 from folium.plugins import MarkerCluster
+from streamlit_folium import st_folium
 
 lp_data = pd.read_csv('laadpaaldata.csv')
 car_data = pd.read_csv('verkeersprestaties_2015_2021.csv')
@@ -129,4 +130,4 @@ m.add_child(marker_cluster)
 
 # Streamlit section
 st.subheader("Charging Points Map")
-st.write(m)
+st_folium(m, width=700)
