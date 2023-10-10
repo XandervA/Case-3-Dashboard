@@ -7,5 +7,4 @@ streamlit
 geopandas
 requests
 folium
-folium.plugins
 streamlit_folium
