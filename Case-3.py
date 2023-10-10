@@ -69,6 +69,16 @@ fig = px.bar(daily_energy, x='Started', y='TotalEnergy', title='Total Energy Con
 fig.add_hline(y=overall_mean_energy, line_dash='dash', line_color='red', annotation_text=f'Overall Mean: {overall_mean_energy:.2f}')
 fig.update_annotations(x=1, y=1, font=dict(size=15, color="red"))
 
+st.title("Case 3 Dashboard WIP")
+st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
+st.plotly_chart(fig, use_container_width=True)
+
+# Streamlit section
+st.title("Case 3 Dashboard WIP")
+st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
+
+st.subheader("Data exploration")
+st.plotly_chart(fig, use_container_width=True)
 
 # Plot 2 
 car_sum_data_melted = pd.melt(car_sum_data, id_vars=['Brandstofsoort'], var_name='Year', value_name='Number of Cars')
@@ -85,9 +95,4 @@ fig2.update_traces(mode='lines+markers')
 fig2.update_layout(showlegend=True, yaxis_type="log")
 
 # Streamlit section
-st.title("Case 3 Dashboard WIP")
-st.caption("By Emma Wartena, Luuk de Goede, Xander van Altena and Salah Bentaher")
-
-st.subheader("Data exploration")
-st.plotly_chart(fig)
-st.plotly_chart(fig2)
+st.plotly_chart(fig2, use_container_width=True)
