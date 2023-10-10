@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-import folium
 import requests
 import geopandas as gpd
+import folium
 from folium.plugins import MarkerCluster
 from streamlit_folium import st_folium
 
