@@ -5,6 +5,6 @@ plotly
 seaborn
 streamlit
 requests
-folium==0.14.0
-geopandas==0.14.0
+folium
+geopandas
 streamlit_folium
