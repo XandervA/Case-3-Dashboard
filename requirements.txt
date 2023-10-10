@@ -1,4 +1,4 @@
-folium
+folium==0.14.0
 matplotlib
 numpy
 pandas
