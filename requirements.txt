@@ -4,3 +4,7 @@ pandas
 plotly
 seaborn
 streamlit
+geopandas
+requests
+folium
+folium.plugins
