@@ -2,9 +2,28 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+import folium
+import requests
+import geopandas as gpd
+from folium.plugins import MarkerCluster
 
 lp_data = pd.read_csv('laadpaaldata.csv')
 car_data = pd.read_csv('verkeersprestaties_2015_2021.csv')
+
+@st.cache_data(ttl=600)
+def api_call():
+    response = requests.get("https://api.openchargemap.io/v3/poi/?output=geojson&countrycode=NL&maxresults=8000&key=93b912b5-9d70-4b1f-960b-fb80a4c9c017")
+    
+    if response.status_code == 200:
+        data = response.json()
+        geo_data = gpd.GeoDataFrame.from_features(data["features"])
+        return geo_data
+    
+    else: 
+        print(f"Error: {response.status_code}")
+        return None
+        
+cached_geo = api_call()
 
 # Data includes Feb 29th but 2018 wasn't a leap year? Setting invalid dates to NaT and dropping them
 lp_data['Started'] = pd.to_datetime(lp_data['Started'], errors='coerce')
@@ -92,3 +111,22 @@ fig2.update_layout(showlegend=True, yaxis_type="log")
 
 # Streamlit section
 st.plotly_chart(fig2, use_container_width=True)
+
+# Plot 3
+m = folium.Map(location=[52.3788, 4.9005], zoom_start=8)
+marker_cluster = MarkerCluster()
+
+for idx, row in cached_geo.iterrows():
+    popup_text = f"<b>{row['name']}</b><br>{row['description']}<br>Level: {row['level']}<br>Connection Type: {row['connectionType']}<br><a href='{row['url']}' target='_blank'>More Info</a>"
+    
+    folium.Marker(
+        location=[row['geometry'].y, row['geometry'].x],
+        popup=popup_text,
+        icon=folium.Icon(color='blue')
+    ).add_to(marker_cluster)
+
+m.add_child(marker_cluster)
+
+# Streamlit section
+st.subheader("Charging Points Map")
+st.write(m)
