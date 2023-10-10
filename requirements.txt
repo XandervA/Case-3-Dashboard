@@ -1,10 +1,10 @@
-folium==0.14.0
 matplotlib
 numpy
 pandas
 plotly
 seaborn
 streamlit
-geopandas
 requests
+folium==0.14.0
+geopandas==0.14.0
 streamlit_folium
